@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
-	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
 )
 
 var dao = AccountsDAO{}

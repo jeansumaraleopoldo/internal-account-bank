@@ -40,6 +40,12 @@ func (m *AccountsDAO) GetByID(id string) (Account, error) {
 	return account, err
 }
 
+func (m *AccountsDAO) GetBalanceByAccountID(id string) (Account, error) {
+	var account Account
+	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).Select(bson.M{"balance": 1}).One(&account)
+	return account, err
+}
+
 func (m *AccountsDAO) Create(account Account) error {
 	err := db.C(COLLECTION).Insert(&account)
 	return err

@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	controller "github.com/jeansumaraleopoldo/internal-account-bank/controllers"
-	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
 )
 
 const (

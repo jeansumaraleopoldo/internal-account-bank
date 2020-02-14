@@ -11,7 +11,7 @@ func Route() *mux.Router {
 	r.HandleFunc("/accounts/{id}", AccountGetById).Methods("GET")
 	r.HandleFunc("/accounts", AccountCreate).Methods("POST")
 	r.HandleFunc("/accounts/{id}", AccountUpdate).Methods("PUT")
-	r.HandleFunc("/accounts", AccountDelete).Methods("DELETE")
+	r.HandleFunc("/accounts/{id}", AccountDelete).Methods("DELETE")
 
 	return r
 }

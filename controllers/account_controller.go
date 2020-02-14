@@ -54,12 +54,12 @@ func AccountGetAll(w http.ResponseWriter, r *http.Request) {
 
 func AccountGetById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	product, err := dao.GetByID(params["id"])
+	account, err := dao.GetByID(params["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid Product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid Account ID")
 		return
 	}
-	respondWithJson(w, http.StatusOK, product)
+	respondWithJson(w, http.StatusOK, account)
 }
 
 func AccountCreate(w http.ResponseWriter, r *http.Request) {
@@ -75,4 +75,29 @@ func AccountCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondWithJson(w, http.StatusCreated, account)
+}
+
+func AccountUpdate(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	params := mux.Vars(r)
+	var account Account
+	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	if err := dao.Update(params["id"], account); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, map[string]string{"result": account.Name + " atualizado com sucesso!"})
+}
+
+func AccountDelete(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	params := mux.Vars(r)
+	if err := dao.Delete(params["id"]); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, map[string]string{"result": "success"})
 }

@@ -13,12 +13,6 @@ type AccountsDAO struct {
 	Database string
 }
 
-var db *mgo.Database
-
-const (
-	COLLECTION = "accounts"
-)
-
 func (m *AccountsDAO) Connect() {
 	log.Println(m.Server)
 	session, err := mgo.Dial(m.Server)
@@ -28,35 +22,19 @@ func (m *AccountsDAO) Connect() {
 	db = session.DB(m.Database)
 }
 
-func (m *AccountsDAO) GetAll() ([]Account, error) {
+func (m *AccountsDAO) GetAllAccounts() ([]Account, error) {
 	var account []Account
-	err := db.C(COLLECTION).Find(bson.M{}).All(&account)
-	return account, err
-}
-
-func (m *AccountsDAO) GetByID(id string) (Account, error) {
-	var account Account
-	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&account)
+	err := db.C(COLLECTION_ACCOUNTS).Find(bson.M{}).All(&account)
 	return account, err
 }
 
 func (m *AccountsDAO) GetBalanceByAccountID(id string) (Account, error) {
 	var account Account
-	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).Select(bson.M{"balance": 1}).One(&account)
+	err := db.C(COLLECTION_ACCOUNTS).FindId(bson.ObjectIdHex(id)).Select(bson.M{"balance": 1}).One(&account)
 	return account, err
 }
 
-func (m *AccountsDAO) Create(account Account) error {
-	err := db.C(COLLECTION).Insert(&account)
-	return err
-}
-
-func (m *AccountsDAO) Delete(id string) error {
-	err := db.C(COLLECTION).RemoveId(bson.ObjectIdHex(id))
-	return err
-}
-
-func (m *AccountsDAO) Update(id string, account Account) error {
-	err := db.C(COLLECTION).UpdateId(bson.ObjectIdHex(id), &account)
+func (m *AccountsDAO) CreateAccount(account Account) error {
+	err := db.C(COLLECTION_ACCOUNTS).Insert(&account)
 	return err
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
 	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
 	"gopkg.in/mgo.v2/bson"
@@ -49,6 +50,16 @@ func AccountGetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondWithJson(w, http.StatusOK, accounts)
+}
+
+func AccountGetById(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	product, err := dao.GetByID(params["id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid Product ID")
+		return
+	}
+	respondWithJson(w, http.StatusOK, product)
 }
 
 func AccountCreate(w http.ResponseWriter, r *http.Request) {

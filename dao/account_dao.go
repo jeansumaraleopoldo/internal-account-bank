@@ -28,3 +28,8 @@ func (m *DAO) CreateAccount(account Account) error {
 	err := db.C(COLLECTION_ACCOUNTS).Insert(&account)
 	return err
 }
+
+func (m *DAO) UpdateAccount(id bson.ObjectId, account Account) error {
+	err := db.C(COLLECTION_ACCOUNTS).UpdateId(id, &account)
+	return err
+}

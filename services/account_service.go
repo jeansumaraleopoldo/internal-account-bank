@@ -3,6 +3,8 @@ package services
 import (
 	. "internal-account-bank/models"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 func GetAllAccounts() ([]Account, error) {
@@ -25,4 +27,8 @@ func GetBalanceByAccountID(id string) (float32, error) {
 func CreateAccount(account Account) error {
 	account.Created_At = time.Now()
 	return dao.CreateAccount(account)
+}
+
+func UpdateAccount(id bson.ObjectId, account Account) error {
+	return dao.UpdateAccount(id, account)
 }

@@ -10,7 +10,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var daoTransfer = AccountsDAO{}
+var daoTransfer = TransfersDAO{}
 
 func init() {
 	config := dbConfig()
@@ -20,12 +20,12 @@ func init() {
 }
 
 func TransferGetAll(w http.ResponseWriter, r *http.Request) {
-	accounts, err := dao.GetAllAccount()
+	transfers, err := daoTransfer.GetAllTransfers()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusOK, accounts)
+	respondWithJson(w, http.StatusOK, transfers)
 }
 
 func TransferCreate(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +37,7 @@ func TransferCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	transfer.ID = bson.NewObjectId()
-	if err := dao.CreateAccount(transfer); err != nil {
+	if err := daoTransfer.CreateTransfer(transfer); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

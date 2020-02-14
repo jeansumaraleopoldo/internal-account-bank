@@ -22,13 +22,13 @@ func (m *TransfersDAO) Connect() {
 	db = session.DB(m.Database)
 }
 
-func (m *TransfersDAO) GetAllTransfers() ([]Account, error) {
-	var account []Account
-	err := db.C(COLLECTION_TRANSFERS).Find(bson.M{}).All(&account)
-	return account, err
+func (m *TransfersDAO) GetAllTransfers() ([]Transfer, error) {
+	var transfer []Transfer
+	err := db.C(COLLECTION_TRANSFERS).Find(bson.M{}).All(&transfer)
+	return transfer, err
 }
 
-func (m *AccountsDAO) CreateTransfer(account Account) error {
-	err := db.C(COLLECTION_TRANSFERS).Insert(&account)
+func (m *TransfersDAO) CreateTransfer(transfer Transfer) error {
+	err := db.C(COLLECTION_TRANSFERS).Insert(&transfer)
 	return err
 }

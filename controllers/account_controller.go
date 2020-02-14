@@ -21,7 +21,7 @@ func init() {
 }
 
 func AccountGetAll(w http.ResponseWriter, r *http.Request) {
-	accounts, err := dao.GetAll()
+	accounts, err := dao.GetAllAccounts()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -36,7 +36,7 @@ func AccountBalanceGetById(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid Account ID")
 		return
 	}
-	respondWithJson(w, http.StatusOK, account.Ballance)
+	respondWithJson(w, http.StatusOK, account.Balance)
 }
 
 func AccountCreate(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +48,7 @@ func AccountCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	account.ID = bson.NewObjectId()
-	if err := dao.Create(account); err != nil {
+	if err := dao.CreateAccount(account); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

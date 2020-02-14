@@ -3,7 +3,8 @@ package dao
 import (
 	"log"
 
-	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
+	. "internal-account-bank/models"
+
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )

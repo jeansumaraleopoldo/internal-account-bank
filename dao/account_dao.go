@@ -3,7 +3,8 @@ package dao
 import (
 	"log"
 
-	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
+	. "internal-account-bank/models"
+
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -28,10 +29,10 @@ func (m *AccountsDAO) GetAllAccounts() ([]Account, error) {
 	return account, err
 }
 
-func (m *AccountsDAO) GetBalanceByAccountID(id string) (Account, error) {
+func (m *AccountsDAO) GetBalanceByAccountID(id string) (float32, error) {
 	var account Account
 	err := db.C(COLLECTION_ACCOUNTS).FindId(bson.ObjectIdHex(id)).Select(bson.M{"balance": 1}).One(&account)
-	return account, err
+	return account.Balance, err
 }
 
 func (m *AccountsDAO) CreateAccount(account Account) error {

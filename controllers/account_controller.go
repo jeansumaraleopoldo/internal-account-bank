@@ -1,27 +1,18 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
 	"net/http"
-	"time"
+
+	. "internal-account-bank/models"
+	"internal-account-bank/services"
 
 	"github.com/gorilla/mux"
-	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
-	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
 	"gopkg.in/mgo.v2/bson"
 )
 
-var dao = AccountsDAO{}
-
-func init() {
-	config := dbConfig()
-	dao.Server = config[dbUrl]
-	dao.Database = config[dbName]
-	dao.Connect()
-}
-
 func AccountGetAll(w http.ResponseWriter, r *http.Request) {
-	accounts, err := dao.GetAllAccounts()
+	accounts, err := services.GetAllAccounts()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -31,24 +22,23 @@ func AccountGetAll(w http.ResponseWriter, r *http.Request) {
 
 func AccountBalanceGetById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	account, err := dao.GetBalanceByAccountID(params["id"])
+	balance, err := services.GetBalanceByAccountID(params["id"])
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid Account ID")
 		return
 	}
-	respondWithJson(w, http.StatusOK, account.Balance)
+	respondWithJson(w, http.StatusOK, balance)
 }
 
 func AccountCreate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var account Account
-	account.Created_At = time.Now()
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 	account.ID = bson.NewObjectId()
-	if err := dao.CreateAccount(account); err != nil {
+	if err := services.CreateAccount(account); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

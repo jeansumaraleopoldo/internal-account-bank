@@ -1,15 +1,10 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
-)
-
-const (
-	dbUrl  = "DB_URL"
-	dbName = "DB_NAME"
 )
 
 func Route() *mux.Router {
@@ -20,14 +15,6 @@ func Route() *mux.Router {
 	r.HandleFunc("/accounts", AccountCreate).Methods("POST")
 
 	return r
-}
-
-func dbConfig() map[string]string {
-	conf := make(map[string]string)
-
-	conf[dbUrl] = "localhost"
-	conf[dbName] = "bank"
-	return conf
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {

@@ -1,26 +1,19 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
 	"net/http"
 	"time"
 
-	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
-	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
+	. "internal-account-bank/models"
+
 	"gopkg.in/mgo.v2/bson"
+
+	"internal-account-bank/services"
 )
 
-var daoTransfer = TransfersDAO{}
-
-func init() {
-	config := dbConfig()
-	dao.Server = config[dbUrl]
-	dao.Database = config[dbName]
-	dao.Connect()
-}
-
 func TransferGetAll(w http.ResponseWriter, r *http.Request) {
-	transfers, err := daoTransfer.GetAllTransfers()
+	transfers, err := services.GetAllTransfers()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -37,9 +30,13 @@ func TransferCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	transfer.ID = bson.NewObjectId()
-	if err := daoTransfer.CreateTransfer(transfer); err != nil {
+
+	services.TransferBetweenAccount(transfer)
+
+	if err := services.CreateTransfer(transfer); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusCreated, account)
+
+	respondWithJson(w, http.StatusCreated, transfer)
 }

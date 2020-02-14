@@ -1,23 +1,19 @@
 package services
 
 import (
-	. "internal-account-bank/dao"
 	. "internal-account-bank/models"
 	"time"
 )
 
-var dao = AccountsDAO{}
-
-func init() {
-	config := dbConfig()
-	dao.Server = config[dbUrl]
-	dao.Database = config[dbName]
-	dao.Connect()
-}
-
 func GetAllAccounts() ([]Account, error) {
 	accounts, err := dao.GetAllAccounts()
 	return accounts, err
+}
+
+func GetAccountById(id string) (Account, error) {
+	account, err := dao.GetAccountById(id)
+
+	return account, err
 }
 
 func GetBalanceByAccountID(id string) (float32, error) {

@@ -13,6 +13,8 @@ func Route() *mux.Router {
 	r.HandleFunc("/accounts", AccountGetAll).Methods("GET")
 	r.HandleFunc("/accounts/{id}/balance", AccountBalanceGetById).Methods("GET")
 	r.HandleFunc("/accounts", AccountCreate).Methods("POST")
+	r.HandleFunc("/transfers", TransferGetAll).Methods("GET")
+	r.HandleFunc("/transfers", TransferCreate).Methods("POST")
 
 	return r
 }

@@ -31,7 +31,10 @@ func TransferCreate(w http.ResponseWriter, r *http.Request) {
 	}
 	transfer.ID = bson.NewObjectId()
 
-	services.TransferBetweenAccount(transfer)
+	if err := services.TransferBetweenAccount(transfer); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 
 	if err := services.CreateTransfer(transfer); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

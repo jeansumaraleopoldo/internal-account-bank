@@ -33,3 +33,18 @@ func (m *AccountsDAO) GetAll() ([]Account, error) {
 	err := db.C(COLLECTION).Find(bson.M{}).All(&account)
 	return account, err
 }
+
+func (m *AccountsDAO) Create(account Account) error {
+	err := db.C(COLLECTION).Insert(&account)
+	return err
+}
+
+func (m *AccountsDAO) Delete(id string) error {
+	err := db.C(COLLECTION).RemoveId(bson.ObjectIdHex(id))
+	return err
+}
+
+func (m *AccountsDAO) Update(id string, account Account) error {
+	err := db.C(COLLECTION).UpdateId(bson.ObjectIdHex(id), &account)
+	return err
+}

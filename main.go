@@ -5,16 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	controller "github.com/jeansumaraleopoldo/internal-account-bank/controllers"
+	controller "internal-account-bank/controllers"
 )
-
-const (
-	dbUrl  = "DB_URL"
-	dbName = "DB_NAME"
-)
-
-func init() {
-}
 
 func main() {
 	r := controller.Route()

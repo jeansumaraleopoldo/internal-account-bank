@@ -5,9 +5,31 @@ import (
 	"net/http"
 
 	. "github.com/jeansumaraleopoldo/internal-account-bank/dao"
+	. "github.com/jeansumaraleopoldo/internal-account-bank/models"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var dao = AccountsDAO{}
+
+const (
+	dbUrl  = "DB_URL"
+	dbName = "DB_NAME"
+)
+
+func init() {
+	config := dbConfig()
+	dao.Server = config[dbUrl]
+	dao.Database = config[dbName]
+	dao.Connect()
+}
+
+func dbConfig() map[string]string {
+	conf := make(map[string]string)
+
+	conf[dbUrl] = "localhost"
+	conf[dbName] = "bank"
+	return conf
+}
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJson(w, code, map[string]string{"error": msg})
@@ -27,4 +49,19 @@ func AccountGetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondWithJson(w, http.StatusOK, accounts)
+}
+
+func AccountCreate(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	var account Account
+	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+	account.ID = bson.NewObjectId()
+	if err := dao.Create(account); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusCreated, account)
 }

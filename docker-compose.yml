@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  stone:
+    container_name: 'internal-account-bank'
+    build: '.'
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/go/src/internal-account-bank'
+    depends_on:
+      - 'mongo'
+  mongo:
+    image: 'mongo:latest'
+    container_name: 'mongo'
+    ports:
+      - '27100:27017'

@@ -1,7 +1,7 @@
 version: '3'
 services:
   stone:
-    container_name: 'stone'
+    container_name: 'internal-account-bank'
     build: '.'
     ports:
       - '3000:3000'

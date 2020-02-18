@@ -10,6 +10,6 @@ O projeto está usando Golang + MongoDB + Docker e o Swagger é bem intencional 
 
 ## Pré requisitos
 
-[Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/).
-[Docker-Compose](https://docs.docker.com/compose/install/).
-[Golang](https://golang.org/dl/).
+1. Instalar o [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/).
+2. Instalar o [Docker-Compose](https://docs.docker.com/compose/install/).
+3. Instalar o [Golang](https://golang.org/dl/).

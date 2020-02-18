@@ -1,0 +1,250 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Swagger responsável por fazer transiçoes entre contas do banco\n",
+    "version" : "1.0.0",
+    "title" : "API",
+    "contact" : {
+      "email" : "jean_sumara@icloud.com"
+    }
+  },
+  "host" : "localhost:3000",
+  "basePath" : "/",
+  "tags" : [ {
+    "name" : "account",
+    "description" : "Contas bancárias e saldos."
+  }, {
+    "name" : "transfer",
+    "description" : "Transferencias entre contas"
+  } ],
+  "paths" : {
+    "/accounts" : {
+      "get" : {
+        "tags" : [ "account" ],
+        "summary" : "Find all accounts",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Account"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "account" ],
+        "summary" : "Add a new account to bank",
+        "operationId" : "addAccount",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Account object that needs to be added to the bank",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/AccountAdd"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid request payload",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "500" : {
+            "description" : "Account with this cpf already exists.",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/balance" : {
+      "get" : {
+        "tags" : [ "account" ],
+        "summary" : "Find balance account by ID",
+        "description" : "Returns a single balance",
+        "operationId" : "getBalanceById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "account_id",
+          "in" : "path",
+          "description" : "ID of account to return balance",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/transfers" : {
+      "get" : {
+        "tags" : [ "transfer" ],
+        "summary" : "Find all transfers",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Transfers"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "transfer" ],
+        "summary" : "Create a transfer between accounts",
+        "operationId" : "placeOrder",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "transfer between accounts",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/TransfersAdd"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Transfers"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Account" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "balance" : {
+          "type" : "number"
+        },
+        "created_at" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "xml" : {
+        "name" : "Account"
+      }
+    },
+    "AccountAdd" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "balance" : {
+          "type" : "number"
+        }
+      },
+      "xml" : {
+        "name" : "Account"
+      }
+    },
+    "Transfers" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "account_origin_id" : {
+          "type" : "string"
+        },
+        "account_destination_id" : {
+          "type" : "string"
+        },
+        "amount" : {
+          "type" : "number"
+        },
+        "created_at" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "xml" : {
+        "name" : "Transfers"
+      }
+    },
+    "TransfersAdd" : {
+      "type" : "object",
+      "properties" : {
+        "account_origin_id" : {
+          "type" : "string"
+        },
+        "account_destination_id" : {
+          "type" : "string"
+        },
+        "amount" : {
+          "type" : "number"
+        }
+      },
+      "xml" : {
+        "name" : "Transfers"
+      }
+    },
+    "ApiResponse" : {
+      "type" : "object",
+      "properties" : {
+        "error" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

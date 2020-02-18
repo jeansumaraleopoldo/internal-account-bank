@@ -20,7 +20,6 @@ services:
     ports:
       - "8082:8080"
     volumes:
-      - ./swagger/openapi.json:/openapi.json
+      - ./swagger/bankapi.json:/bankapi.json
     environment:
-      SWAGGER_JSON: /openapi.json
-      # API_URL: ""
+      SWAGGER_JSON: /bankapi.json

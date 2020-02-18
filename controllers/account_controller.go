@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	. "internal-account-bank/models"
 	"internal-account-bank/services"
@@ -33,6 +34,7 @@ func AccountBalanceGetById(w http.ResponseWriter, r *http.Request) {
 func AccountCreate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var account Account
+	account.Created_At = time.Now()
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return

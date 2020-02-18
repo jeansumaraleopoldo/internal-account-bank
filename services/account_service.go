@@ -3,7 +3,6 @@ package services
 import (
 	"errors"
 	. "internal-account-bank/models"
-	"time"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -39,7 +38,6 @@ func CreateAccount(account Account) error {
 	if foundAccount.Cpf != "" || err != nil && err.Error() != "not found" {
 		return errors.New("Account with this cpf already exists.")
 	}
-	account.Created_At = time.Now()
 	return dao.CreateAccount(account)
 }
 

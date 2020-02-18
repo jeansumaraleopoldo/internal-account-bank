@@ -19,8 +19,8 @@ func GetAccountById(id string) (Account, error) {
 	return account, err
 }
 
-func GetAccountByCpf(cpf integer) (Account, error) {
-	account, err := dao.GetAccountById(id)
+func GetAccountByCpf(cpf string) (Account, error) {
+	account, err := dao.GetAccountByCpf(cpf)
 
 	return account, err
 }
@@ -35,6 +35,10 @@ func GetBalanceByAccountID(id string) (float32, error) {
 }
 
 func CreateAccount(account Account) error {
+	foundAccount, err := GetAccountByCpf(account.Cpf)
+	if foundAccount.Cpf != "" || err != nil && err.Error() != "not found" {
+		return errors.New("Account with this cpf already exists")
+	}
 	account.Created_At = time.Now()
 	return dao.CreateAccount(account)
 }

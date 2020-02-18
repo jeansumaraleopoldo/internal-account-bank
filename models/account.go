@@ -9,7 +9,7 @@ import (
 type Account struct {
 	ID         bson.ObjectId `bson:"_id" json:"id"`
 	Name       string        `bson:"name" json:"name"`
-	Cpf        int           `bson:"cpf" json:"cpf"`
+	Cpf        string        `bson:"cpf" json:"cpf"`
 	Balance    float32       `bson:"balance" json:"balance"`
 	Created_At time.Time     `bson:"created_at" json:"created_at"`
 }

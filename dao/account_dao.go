@@ -18,6 +18,12 @@ func (m *DAO) GetAccountById(id string) (Account, error) {
 	return account, err
 }
 
+func (m *DAO) GetAccountByCpf(cpf string) (Account, error) {
+	var account Account
+	err := db.C(COLLECTION_ACCOUNTS).Find(bson.M{"cpf": cpf}).Select(bson.M{"cpf": 1}).One(&account)
+	return account, err
+}
+
 func (m *DAO) GetBalanceByAccountID(id string) (float32, error) {
 	var account Account
 	err := db.C(COLLECTION_ACCOUNTS).FindId(bson.ObjectIdHex(id)).Select(bson.M{"balance": 1}).One(&account)

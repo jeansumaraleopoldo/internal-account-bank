@@ -24,7 +24,7 @@ func AccountBalanceGetById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	balance, err := services.GetBalanceByAccountID(params["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid Account ID")
+		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	respondWithJson(w, http.StatusOK, balance)

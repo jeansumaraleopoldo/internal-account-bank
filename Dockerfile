@@ -1,5 +1,6 @@
 FROM golang
 RUN go get github.com/gorilla/mux
+RUN go get github.com/rs/cors
 RUN go get gopkg.in/mgo.v2
 
 WORKDIR /go/src/internal-account-bank

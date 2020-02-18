@@ -10,6 +10,7 @@ import (
 func Route() *mux.Router {
 	r := mux.NewRouter()
 
+	r.Use(accessControlMiddleware)
 	r.HandleFunc("/accounts", AccountGetAll).Methods("GET")
 	r.HandleFunc("/accounts/{id}/balance", AccountBalanceGetById).Methods("GET")
 	r.HandleFunc("/accounts", AccountCreate).Methods("POST")
@@ -17,6 +18,21 @@ func Route() *mux.Router {
 	r.HandleFunc("/transfers", TransferCreate).Methods("POST")
 
 	return r
+}
+
+// access control and  CORS middleware
+func accessControlMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS,PUT")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
+
+		if r.Method == "OPTIONS" {
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {
